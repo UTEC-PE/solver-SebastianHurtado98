@@ -23,10 +23,15 @@ private:
         vector<pair<char, int>> v;
         pair<char, int> foo;
         int j = 0;
+        int i=0;
         for (auto f : str) {
-            if ((f == '/') || (f == '*') || (f == '+') || (f == '-') || (f == '^')) {
-                foo = make_pair(f, j);
-                v.push_back(foo);
+            if (f=='(') i++;
+            if(f==')') i--;
+            if(i==0) {
+                if ((f == '/') || (f == '*') || (f == '+') || (f == '-') || (f == '^')) {
+                    foo = make_pair(f, j);
+                    v.push_back(foo);
+                }
             }
             j++;
         }
@@ -70,6 +75,28 @@ private:
         return {f2, f1};
     };
 
+    string clean(string str){
+        //falta implementar con variables repetidas
+        cout << endl << "Limpiando string de variables...";
+        char letters[] = "abcdefghijklmnopqrstuvwxyz";
+        int n=str.size();
+        char x;
+        for (int i =0; i<n; i++){
+            for (auto f2: letters){
+                if (str[i]==f2){
+                    cout <<"Inserte el valor numérico de " <<f2 <<": ";
+                    cin>>x;
+                    str[i]=x;
+                    cout << endl;
+                }
+            }
+        }
+        cout << endl;
+        return str;
+
+    };
+
+
 
 public:
     Tree() {
@@ -77,6 +104,12 @@ public:
     };
 
     Tree(T str) {
+
+        str= clean(str);
+        if(parenthesis(str)){
+            int n2= str.size();
+            str= str.substr(1,n2-2);
+        }
         auto[position, value]= pars(str);
         auto *n = new Node<T>();
         n->data = value;
@@ -90,8 +123,13 @@ public:
         create_node(right, false, head);
     }
 
+
     void create_node(T str, bool path, Node<T> *current) {
 
+        if(parenthesis(str)){
+            int n2= str.size();
+            str= str.substr(1,n2-2);
+        }
         if (str.size() == 1) {
             auto *n = new Node<T>();
             n->data = str;
@@ -151,10 +189,12 @@ public:
     float start(){
 
         return operate(head->left, head, head->right);
-
     };
 
-
+    bool parenthesis(T str){
+        if ((str[0]=='(')&& (str[str.size()-1]==')')) {return true;}
+        else {return false;}
+    };
 
 
 };

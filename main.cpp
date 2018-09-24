@@ -46,7 +46,8 @@ tuple<int, T> pars(T str){
 
 int main() {
 
-    string str= "7+2*4^2";
+    string str= "(7+3)*2^2";
+
     Tree<string> tree(str);
     cout << tree.start();
 
